@@ -1,0 +1,9 @@
+type Mutation {
+    userChangePwd(password: String!): User
+    userChangeRole(role: String!): User
+    userChangeSignature(signature: String!): User
+    blogCreate(uid: String!, title: String!, content: String!): Blog
+    blogUpdate(id: String!, title: String!, content: String!): Blog
+    commentCreate(uid: String!, content: String!): Comment
+    commentUpdate(id: String!, content: String!): Comment
+}

@@ -1,6 +1,0 @@
-type Query {
-    user(id: ID!): User
-    blog(id: ID!): Blog
-    blogList(page: Int!): [Blog!]!
-    commentList(page: Int!): [Comment!]!
-}

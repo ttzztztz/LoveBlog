@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@types/mongodb": "^3.1.19",
+    "dotenv": "^6.2.0",
+    "mongodb": "^3.1.13"
+  }
+}

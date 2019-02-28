@@ -1,3 +1,1 @@
-export const BlogInfo = {
-    name: "Rabbit's Blog"
-};
+export const PAGESIZE = 20;
