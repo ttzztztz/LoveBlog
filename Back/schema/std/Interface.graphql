@@ -1,0 +1,15 @@
+interface IUser {
+    username: String!
+    password: String!
+}
+
+interface IBlog {
+    author: User!
+    title: String!
+    content: String!
+}
+
+interface IComment {
+    author: User!
+    message: String
+}

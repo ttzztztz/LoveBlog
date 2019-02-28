@@ -1,0 +1,17 @@
+{
+    "name": "love_blog",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "dependencies": {
+        "graphql-yoga": "^1.17.4"
+    },
+    "devDependencies": {
+        "typescript": "^3.3.3333"
+    },
+    "scripts": {
+        "dev": "ts-node server.ts",
+        "compile": "tsc",
+        "start": "node ./output/server.js"
+    }
+}
