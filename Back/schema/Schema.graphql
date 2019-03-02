@@ -22,3 +22,8 @@ type Comment implements IComment {
     content: String
     createDate: Date!
 }
+
+type AuthPayload {
+    code: Int!
+    token: String!
+}

@@ -7,6 +7,8 @@
         "graphql-yoga": "^1.17.4"
     },
     "devDependencies": {
+        "@types/aws-lambda": "^8.10.20",
+        "@types/ws": "^6.0.1",
         "typescript": "^3.3.3333"
     },
     "scripts": {

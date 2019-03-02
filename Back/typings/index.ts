@@ -66,3 +66,21 @@ export interface ICommentPush {
     content: string;
     createDate: Date;
 }
+export interface IUserLoginArg {
+    username: string;
+    password: string;
+}
+export interface IJWTContent {
+    uid: string;
+    username: string;
+    role: string;
+}
+export interface AuthPayload {
+    code: number;
+    token: string;
+}
+export interface IUserCreateArg {
+    username: string;
+    password: string;
+    role: string;
+}

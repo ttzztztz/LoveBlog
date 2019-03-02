@@ -1,4 +1,6 @@
 type Mutation {
+    userLogin(username: String!, password: String!): AuthPayload!
+    userCreate(username: String!, password: String!, role: String!): String!
     userUpdatePwd(password: String!): Int!
     userUpdateRole(role: String!): Int!
     userUpdateSignature(signature: String!): Int!

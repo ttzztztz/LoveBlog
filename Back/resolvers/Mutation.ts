@@ -12,18 +12,21 @@ import {
     IBlogInsert,
     ICommentPush,
     IBlogUpdate,
-    IBlog
+    IBlog,
+    IUser,
+    IUserLoginArg,
+    AuthPayload,
+    IUserCreateArg
 } from "../typings";
-import { verifyJWT } from "../models/check";
+import { verifyJWT, addSaltPasswordOnce, signJWT } from "../models/check";
 
 export default {
     async userUpdatePwd(_parent: any, args: IUserUpdatePwdArgs, context: any) {
         const { password } = args;
-        const { uid } = verifyJWT(context.request.header("Authorization"));
-
         const { db, client } = await dbConnect();
 
         try {
+            const { uid } = verifyJWT(context.request.header("Authorization"));
             const result = await db.collection("user").updateOne(
                 {
                     _id: new ObjectID(uid)
@@ -45,11 +48,11 @@ export default {
     },
     async userUpdateRole(_parent: any, args: IUserUpdateRoleArgs, context: any) {
         const { role } = args;
-        const { uid } = verifyJWT(context.request.header("Authorization"));
 
         const { db, client } = await dbConnect();
 
         try {
+            const { uid } = verifyJWT(context.request.header("Authorization"));
             const result = await db.collection("user").updateOne(
                 {
                     _id: new ObjectID(uid)
@@ -71,11 +74,11 @@ export default {
     },
     async userUpdateSignature(_parent: any, args: IUserUpdateSignatureArgs, context: any) {
         const { signature } = args;
-        const { uid } = verifyJWT(context.request.header("Authorization"));
 
         const { db, client } = await dbConnect();
 
         try {
+            const { uid } = verifyJWT(context.request.header("Authorization"));
             const result = await db.collection("user").updateOne(
                 {
                     _id: new ObjectID(uid)
@@ -96,11 +99,11 @@ export default {
         return 0;
     },
     async blogInsert(_parent: any, args: IBlogInsertArgs, context: any) {
-        const { uid } = verifyJWT(context.request.header("Authorization"));
         const { title, content } = args;
         const { db, client } = await dbConnect();
 
         try {
+            const { uid } = verifyJWT(context.request.header("Authorization"));
             const insertObj: IBlogInsert = {
                 author: new ObjectID(uid),
                 title: title,
@@ -120,11 +123,11 @@ export default {
         return "0";
     },
     async commentInsert(_parent: any, args: ICommentInsertArgs, context: any) {
-        const { uid } = verifyJWT(context.request.header("Authorization"));
         const { blogId, content } = args;
         const { db, client } = await dbConnect();
 
         try {
+            const { uid } = verifyJWT(context.request.header("Authorization"));
             const pushObj: ICommentPush = {
                 _id: new ObjectID(),
                 author: new ObjectID(uid),
@@ -152,11 +155,11 @@ export default {
         return 0;
     },
     async blogUpdate(_parent: any, args: IBlogUpdateArgs, context: any) {
-        const { uid } = verifyJWT(context.request.header("Authorization"));
         const { _id, title, content } = args;
         const { db, client } = await dbConnect();
 
         try {
+            const { uid } = verifyJWT(context.request.header("Authorization"));
             const nowBlogInfo: IBlog | null = await db.collection("blog").findOne({
                 _id: new ObjectID(_id)
             });
@@ -188,11 +191,11 @@ export default {
         return 0;
     },
     async commentUpdate(_parent: any, args: ICommentUpdateArgs, context: any) {
-        const { uid } = verifyJWT(context.request.header("Authorization"));
         const { _id, content } = args;
         const { db, client } = await dbConnect();
 
         try {
+            const { uid } = verifyJWT(context.request.header("Authorization"));
             const nowCommentInfo: IBlog | null = await db.collection("blog").findOne({
                 comment: {
                     $elemMatch: {
@@ -206,18 +209,93 @@ export default {
             }
 
             nowCommentInfo.comment[0].content = content;
-            delete nowCommentInfo._id;
+
+            const updateObj = Object.entries(nowCommentInfo).reduce(
+                ([k, v], p) => {
+                    if (k !== "_id") {
+                        return {
+                            ...p,
+                            [k]: v
+                        };
+                    } else {
+                        return p;
+                    }
+                },
+                {} as any
+            );
 
             const result = await db.collection("blog").findOneAndUpdate(
                 {
                     _id: nowCommentInfo._id!
                 },
                 {
-                    $set: nowCommentInfo
+                    $set: updateObj
                 }
             );
 
             return result.ok;
+        } catch (e) {
+            console.log(e);
+        } finally {
+            client.close();
+        }
+        return 0;
+    },
+    userLogin: async (_parent: any, args: IUserLoginArg, _context: any) => {
+        const { username, password } = args;
+
+        const { db, client } = await dbConnect();
+
+        try {
+            const userInfo: IUser | null = await db.collection("user").findOne({
+                username: username
+            });
+            if (!userInfo || userInfo.password !== addSaltPasswordOnce(password)) {
+                return {
+                    code: -1,
+                    token: ""
+                } as AuthPayload;
+            } else {
+                let uid: string = "";
+
+                if (userInfo!._id instanceof ObjectID) {
+                    uid = (userInfo!._id! as ObjectID).toHexString();
+                } else {
+                    uid = userInfo!._id as string;
+                }
+
+                const token = signJWT(uid, userInfo!.username, userInfo!.role);
+                return {
+                    code: 1,
+                    token: token
+                };
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
+            client.close();
+        }
+        return {
+            code: -1,
+            token: ""
+        } as AuthPayload;
+    },
+    userCreate: async (_parent: any, args: IUserCreateArg, _context: any) => {
+        const { username, password, role } = args;
+
+        const { db, client } = await dbConnect();
+        try {
+            const insertObj: IUser = {
+                username: username,
+                password: addSaltPasswordOnce(password),
+                role: role,
+                signature: "",
+                createDate: new Date()
+            };
+
+            const result = await db.collection("user").insertOne(insertObj);
+
+            return result.insertedCount;
         } catch (e) {
             console.log(e);
         } finally {
