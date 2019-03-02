@@ -1,5 +1,5 @@
 type User implements IUser {
-    id: String!
+    _id: String!
     username: String!
     password: String!
     role: String!
@@ -8,16 +8,16 @@ type User implements IUser {
 }
 
 type Blog implements IBlog {
-    id: String!
+    _id: String!
     author: User!
     title: String!
     content: String!
     createDate: Date!
-    Comment: [Comment!]!
+    comment: [Comment!]!
 }
 
 type Comment implements IComment {
-    id: String!
+    _id: String!
     author: User!
     content: String
     createDate: Date!

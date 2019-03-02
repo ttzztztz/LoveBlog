@@ -1,6 +1,5 @@
 type Query {
-    user(id: String!): User
-    blog(id: String!): Blog
+    user(_id: String!): User
+    blog(_id: String!): Blog
     blogList(page: Int!): [Blog!]!
-    commentList(blogId: String!, page: Int!): [Comment!]!
 }

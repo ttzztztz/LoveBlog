@@ -1,14 +1,14 @@
 import { dbConnect } from "../models/db";
 import { PAGESIZE } from "../models/consts";
 import { ObjectID } from "mongodb";
-import { IUser, IBlog, IComment } from "../typings";
+import { IUser, IBlog } from "../typings";
 
 export default {
-    user: async (id: string) => {
+    user: async (_id: string) => {
         const { db, client } = await dbConnect();
         try {
             const result = await db.collection("user").findOne({
-                _id: new ObjectID(id)
+                _id: new ObjectID(_id)
             });
             return result as IUser;
         } catch (e) {
@@ -18,11 +18,11 @@ export default {
         }
         return null;
     },
-    blog: async (id: string) => {
+    blog: async (_id: string) => {
         const { db, client } = await dbConnect();
         try {
             const result = await db.collection("blog").findOne({
-                _id: new ObjectID(id)
+                _id: new ObjectID(_id)
             });
             return result as IBlog;
         } catch (e) {
@@ -58,37 +58,5 @@ export default {
             client.close();
         }
         return [] as Array<IBlog>;
-    },
-    commentList: async (blogId: string, page: number) => {
-        const { db, client } = await dbConnect();
-        try {
-            const result = await db
-                .collection("comment")
-                .aggregate([
-                    {
-                        $match: {
-                            blogId: new ObjectID(blogId)
-                        }
-                    },
-                    {
-                        $sort: {
-                            createDate: 1
-                        }
-                    },
-                    {
-                        $skip: PAGESIZE * (page - 1)
-                    },
-                    {
-                        $limit: PAGESIZE
-                    }
-                ])
-                .toArray();
-            return result as Array<IComment>;
-        } catch (e) {
-            console.log(e);
-        } finally {
-            client.close();
-        }
-        return [] as Array<IComment>;
     }
 };
