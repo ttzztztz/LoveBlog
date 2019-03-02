@@ -13,8 +13,9 @@ services:
         build: .
         environment:
             - MODE=production
+            - SECRET=hzytql
         ports:
-            - 6666:6666
+            - 8082:8082
         links:
             - mongodb
         depends_on:

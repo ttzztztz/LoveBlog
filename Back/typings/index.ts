@@ -1,5 +1,6 @@
 import { ObjectID } from "mongodb";
 
+// <-- Basic interface
 export interface IUser {
     _id?: ObjectID | string;
     username: string;
@@ -10,19 +11,19 @@ export interface IUser {
 }
 export interface IComment {
     _id?: ObjectID | string;
-    blogId: ObjectID | string;
-    author: IUser;
+    author: IUser | ObjectID | string;
     content: string;
     createDate: Date;
 }
 export interface IBlog {
     _id?: ObjectID | string;
-    author: IUser;
+    author: IUser | ObjectID | string;
     title: string;
     content: string;
     createDate: Date;
-    comment: Array<IComment>;
+    comment: Array<IComment | ObjectID | string>;
 }
+// <-- Extensions interface
 export interface IUserUpdatePwdArgs {
     password: string;
 }
@@ -83,4 +84,13 @@ export interface IUserCreateArg {
     username: string;
     password: string;
     role: string;
+}
+export interface IUserQueryArg {
+    _id: string;
+}
+export interface IBlogQueryArg {
+    _id: string;
+}
+export interface IBlogListArg {
+    page: number;
 }

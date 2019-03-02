@@ -1,10 +1,11 @@
 import { dbConnect } from "../models/db";
 import { PAGESIZE } from "../models/consts";
 import { ObjectID } from "mongodb";
-import { IUser, IBlog } from "../typings";
+import { IUser, IBlog, IUserQueryArg, IBlogQueryArg, IBlogListArg } from "../typings";
 
 export default {
-    user: async (_id: string) => {
+    user: async (_parent: any, args: IUserQueryArg) => {
+        const { _id } = args;
         const { db, client } = await dbConnect();
         try {
             const result = await db.collection("user").findOne({
@@ -18,7 +19,8 @@ export default {
         }
         return null;
     },
-    blog: async (_id: string) => {
+    blog: async (_parent: any, args: IBlogQueryArg) => {
+        const { _id } = args;
         const { db, client } = await dbConnect();
         try {
             const result = await db.collection("blog").findOne({
@@ -32,7 +34,8 @@ export default {
         }
         return null;
     },
-    blogList: async (page: number) => {
+    blogList: async (_parent: any, args: IBlogListArg) => {
+        const { page } = args;
         const { db, client } = await dbConnect();
         try {
             const result = await db

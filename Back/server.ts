@@ -1,23 +1,20 @@
 require("dotenv").config();
 
 import { GraphQLServer, Options } from "graphql-yoga";
-import Resolvers from "./resolvers";
-
-const typeDefs = [
-    "./schema/Interface.graphql",
-    "./schema/Mutation.graphql",
-    "./schema/Query.graphql",
-    "./schema/Scalar.graphql",
-    "./schema/Schema.graphql"
-];
+import resolvers from "./resolvers";
+import schemas from "./schema";
 
 const server = new GraphQLServer({
-    typeDefs,
-    resolvers: Resolvers
+    typeDefs: schemas,
+    resolvers: resolvers,
+    resolverValidationOptions: {
+        requireResolversForResolveType: false
+    }
 });
 
 const serverOptions: Options = {
-    port: 6666
+    port: 8082,
+    playground: "/graphql"
 };
 
-server.start(serverOptions, () => console.log("Rabbit WebServer is running on port 6666"));
+server.start(serverOptions, () => console.log("Rabbit WebServer is running on port 8082"));

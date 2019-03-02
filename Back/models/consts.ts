@@ -1,2 +1,4 @@
+require("dotenv").config();
+
 export const PAGESIZE = 20;
-export const SECRET = "hzytql";
+export const SECRET = process.env.SECRET!;

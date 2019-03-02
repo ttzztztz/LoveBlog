@@ -164,7 +164,7 @@ export default {
                 _id: new ObjectID(_id)
             });
 
-            if (!nowBlogInfo || nowBlogInfo.author._id !== uid) {
+            if (!nowBlogInfo || (nowBlogInfo.author as ObjectID).toHexString() !== uid) {
                 return 0;
             }
 
@@ -204,11 +204,11 @@ export default {
                 }
             });
 
-            if (!nowCommentInfo || nowCommentInfo.author._id !== uid) {
+            if (!nowCommentInfo || (nowCommentInfo.author as ObjectID).toHexString() !== uid) {
                 return 0;
             }
 
-            nowCommentInfo.comment[0].content = content;
+            (nowCommentInfo.comment as IComment[])[0].content = content;
 
             const updateObj = Object.entries(nowCommentInfo).reduce(
                 ([k, v], p) => {
