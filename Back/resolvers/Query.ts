@@ -2,12 +2,14 @@ import { dbConnect } from "../models/db";
 import { PAGESIZE } from "../models/consts";
 import { ObjectID } from "mongodb";
 import { IUser, IBlog, IUserQueryArg, IBlogQueryArg, IBlogListArg } from "../typings";
+import { verifyJWT } from "../models/check";
 
 export default {
-    user: async (_parent: any, args: IUserQueryArg) => {
+    user: async (_parent: any, args: IUserQueryArg, context: any) => {
         const { _id } = args;
         const { db, client } = await dbConnect();
         try {
+            verifyJWT(context.request.header("Authorization"));
             const result = await db.collection("user").findOne({
                 _id: new ObjectID(_id)
             });
@@ -19,10 +21,11 @@ export default {
         }
         return null;
     },
-    blog: async (_parent: any, args: IBlogQueryArg) => {
+    blog: async (_parent: any, args: IBlogQueryArg, context: any) => {
         const { _id } = args;
         const { db, client } = await dbConnect();
         try {
+            verifyJWT(context.request.header("Authorization"));
             const result = await db.collection("blog").findOne({
                 _id: new ObjectID(_id)
             });
@@ -34,10 +37,11 @@ export default {
         }
         return null;
     },
-    blogList: async (_parent: any, args: IBlogListArg) => {
+    blogList: async (_parent: any, args: IBlogListArg, context: any) => {
         const { page } = args;
         const { db, client } = await dbConnect();
         try {
+            verifyJWT(context.request.header("Authorization"));
             const result = await db
                 .collection("blog")
                 .aggregate([

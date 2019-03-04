@@ -2,7 +2,7 @@ require("dotenv").config();
 
 import { dbConnect } from "../models/db";
 import { IUser, IBlog, IComment } from "../typings";
-import { addSaltPasswordOnce } from "../models/check";
+import { addSaltPassword } from "../models/check";
 
 (async () => {
     const { db, client } = await dbConnect();
@@ -10,7 +10,7 @@ import { addSaltPasswordOnce } from "../models/check";
         // <-- Init User
         const userObj: IUser = {
             username: "Faraway",
-            password: addSaltPasswordOnce("P@ssw0rd"),
+            password: addSaltPassword("P@ssw0rd"),
             role: "Boy",
             signature: "hzytql",
             createDate: new Date()

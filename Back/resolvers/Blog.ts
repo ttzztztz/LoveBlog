@@ -27,5 +27,23 @@ export default {
     title: (parent: IBlog) => parent.title,
     content: (parent: IBlog) => parent.content,
     createDate: (parent: IBlog) => parent.createDate,
-    comment: (parent: IBlog) => parent.comment
+    comment: async (parent: IBlog) => {
+        const { db, client } = await dbConnect();
+        try {
+            return Promise.all(
+                (parent.comment as any[]).map(async item => {
+                    item.author = await db.collection("user").findOne({
+                        _id: new ObjectID(item.author)
+                    });
+                    return item;
+                })
+            );
+        } catch (e) {
+            console.log(e);
+        } finally {
+            client.close();
+        }
+
+        return [];
+    }
 };
