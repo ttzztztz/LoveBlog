@@ -45,7 +45,6 @@ export const GET_BLOG_LIST = (page: number) => gql`
                 username
             }
             title
-            content
             createDate
         }
     }

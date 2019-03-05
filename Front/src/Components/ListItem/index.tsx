@@ -1,5 +1,5 @@
 import React from "react";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps, withRouter } from "react-router";
 
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -28,7 +28,7 @@ class ListItem extends React.PureComponent<IListItemProps & WithStyles & RouteCo
                 <Typography variant="h3" color="inherit" className={classes["item-head"]}>
                     {title}
                 </Typography>
-                <Typography variant="h6" color="inherit" className={classes["item-head"]}>
+                <Typography variant="h6" color="inherit" className={classes["item-body"]}>
                     {authorName} {createDate.toLocaleString()}
                 </Typography>
             </Paper>
@@ -36,4 +36,4 @@ class ListItem extends React.PureComponent<IListItemProps & WithStyles & RouteCo
     }
 }
 
-export default withStyles(styles)(ListItem);
+export default withStyles(styles)(withRouter(ListItem));
