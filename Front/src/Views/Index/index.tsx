@@ -1,26 +1,26 @@
 import React from "react";
+
 import withRoot from "../../Styles/WithRoot";
-import { withRouter } from "react-router-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router";
 
-import Client from "../../Models/ApolloClient";
-import { GET_BLOG_LIST } from "../../Models/Query";
-
+import List from "../../Views/List";
 import Bar from "../../Components/Bar";
 
-class Index extends React.PureComponent {
+class Index extends React.PureComponent<RouteComponentProps> {
     render() {
         return (
-            <div>
+            <>
                 <Bar />
-            </div>
+                <Switch>
+                    <Redirect exact from="/" to="/list/1" />
+                    <Route path="/list/:page" component={List} />
+                    <Route path="/blog/:id" />
+                    <Route path="/create" />
+                    <Route path="/user" />
+                </Switch>
+            </>
         );
-    }
-    async componentDidMount() {
-        const result = await Client.query({
-            query: GET_BLOG_LIST(1)
-        });
-
-        console.log(result);
     }
 }
 

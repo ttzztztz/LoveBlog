@@ -40,6 +40,7 @@ export const GET_BLOG = (id: string) => gql`
 export const GET_BLOG_LIST = (page: number) => gql`
     query{
         blogList(page:${page}){
+            _id
             author {
                 username
             }
