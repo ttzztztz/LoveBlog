@@ -7,7 +7,7 @@ export default `
         userUpdateSignature(signature: String!): Int!
         blogInsert(title: String!, content: String!): String!
         blogUpdate(_id: String!, title: String!, content: String!): Int!
-        commentInsert(content: String!): String!
+        commentInsert(blogId: String!, content: String!): String!
         commentUpdate(_id: String!, content: String!): Int!
     }
 `;
