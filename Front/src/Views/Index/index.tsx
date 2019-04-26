@@ -5,7 +5,7 @@ import { Route, Redirect, Switch } from "react-router-dom";
 import { RouteComponentProps, withRouter } from "react-router";
 
 import List from "../../Views/List";
-import Bar from "../../Components/Bar";
+import Bar from "../../Containers/Bar";
 
 class Index extends React.PureComponent<RouteComponentProps> {
     render() {

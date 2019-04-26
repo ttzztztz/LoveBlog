@@ -6,12 +6,12 @@ import { verifyJWT } from "../models/check";
 
 export default {
     user: async (_parent: any, args: IUserQueryArg, context: any) => {
-        const { _id } = args;
+        const { username } = args;
         const { db, client } = await dbConnect();
         try {
             verifyJWT(context.request.header("Authorization"));
             const result = await db.collection("user").findOne({
-                _id: new ObjectID(_id)
+                username: username
             });
             return result as IUser;
         } catch (e) {

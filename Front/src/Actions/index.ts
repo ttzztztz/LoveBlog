@@ -23,3 +23,27 @@ export function userLogout() {
         type: USER_LOGOUT
     };
 }
+
+export const USER_GET_INFO = "USER_GET_INFO";
+export type USER_GET_INFO = typeof USER_GET_INFO;
+export interface UserGetInfo {
+    type: USER_GET_INFO;
+    payload: string;
+}
+export function userGetInfo(id: string): UserGetInfo {
+    return {
+        type: USER_GET_INFO,
+        payload: id
+    };
+}
+
+export const USER_SET_INFO = "USER_SET_INFO";
+export type USER_SET_INFO = typeof USER_SET_INFO;
+export interface UserSetInfo {
+    type: USER_SET_INFO;
+}
+export function userSetInfo(): UserSetInfo {
+    return {
+        type: USER_SET_INFO
+    };
+}

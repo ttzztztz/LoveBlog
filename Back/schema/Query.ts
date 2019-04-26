@@ -1,6 +1,6 @@
 export default `
     type Query {
-        user(_id: String!): User
+        user(username: String!): User
         blog(_id: String!): Blog
         blogList(page: Int!): [Blog!]!
     }

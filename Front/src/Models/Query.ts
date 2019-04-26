@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 
 export const GET_USER = (id: string) => gql`
     query{
-        user(_id:"${id}"){
+        user(username:"${id}"){
             _id
             username
             role

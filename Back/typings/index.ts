@@ -86,7 +86,7 @@ export interface IUserCreateArg {
     role: string;
 }
 export interface IUserQueryArg {
-    _id: string;
+    username: string;
 }
 export interface IBlogQueryArg {
     _id: string;

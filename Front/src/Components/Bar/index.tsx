@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { RouteComponentProps, withRouter } from "react-router";
+import { RouteComponentProps } from "react-router";
 
 import { withStyles, WithStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -11,9 +11,15 @@ import Create from "@material-ui/icons/Create";
 import Settings from "@material-ui/icons/Settings";
 
 import styles from "../../Styles/Bar";
+import { UserGetInfo } from "../../Actions";
 
-class Bar extends React.PureComponent<WithStyles & RouteComponentProps> {
+interface Props extends WithStyles {
+    getUserInfo: (id: string) => UserGetInfo;
+}
+
+class Bar extends React.PureComponent<Props & RouteComponentProps> {
     handleCreateClick = () => {
+        this.props.getUserInfo("Faraway");
         this.props.history.push({
             pathname: "/create"
         });
@@ -53,4 +59,4 @@ class Bar extends React.PureComponent<WithStyles & RouteComponentProps> {
     }
 }
 
-export default withStyles(styles)(withRouter(Bar));
+export default withStyles(styles)(Bar);
